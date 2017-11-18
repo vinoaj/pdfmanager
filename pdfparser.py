@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+import sys
 from PyPDF2 import PdfFileReader
 
 
@@ -34,7 +35,7 @@ class PdfParser:
         return self.contents[page_n]
 
     def set_re_match_rule(self, regex):
-        self.re_match_rule = re.compile(regex)
+        self.re_match_rule = re.compile(regex, re.MULTILINE|re.S)
 
     def get_matches(self, page_n):
         return re.findall(self.re_match_rule, self.contents[page_n])
@@ -47,7 +48,8 @@ class PdfParser:
         pdf_path_new = file_name_new + file_extension
 
         # Use Ghostscript to repair the PDF file
-        subprocess.run(['gs', '-o', pdf_path_new, '-sDEVICE=pdfwrite', '-dPDFSETTINGS=/prepress', path])
+        subprocess.run(['gs', '-o', pdf_path_new, '-sDEVICE=pdfwrite', '-dPDFSETTINGS=/prepress', path],
+                       stdout=subprocess.DEVNULL)
 
         return pdf_path_new
 
