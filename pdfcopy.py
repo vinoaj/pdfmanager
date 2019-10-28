@@ -13,7 +13,9 @@ def open_file(path, file_password):
     pdf_input = PdfFileReader(open(path, "rb"))
 
     if pdf_input.isEncrypted is True:
-        pdf_input.decrypt(file_password)
+        print("File is encrypted")
+        if file_password is not None:
+            pdf_input.decrypt(file_password)
 
     return pdf_input
 
